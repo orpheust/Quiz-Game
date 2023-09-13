@@ -10,8 +10,8 @@
 	<div class="app">
         <h1>Who Wants To Be a President</h1>
         <div id="countdown" class="countdown" style="display: none;">
-            <p>Time Left: <span id="timer">15</span> seconds</p>
-        </div>        
+            <p>Time Left: <span id="timer">10</span> seconds</p>
+        </div>   
         <div id="main-menu" class="menu">
             <button id="play-btn" class="btn">Play</button>
             <button id="options-btn" class="btn">Options</button>
@@ -25,14 +25,18 @@
         <div id="options" class="menu" style="display: none;">
             <h2>Volume</h2>
             <div class="slidecontainer">
-                <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+                <div class="slider">
+                    <input type="range" min="1" max="100" value="50" class="slider">
+                    <progress value="50" min="0" max="100"></progress>
+                </div>
+                <div class="sliderValue">50</div>
             </div>
-            <div class="backborder"><button id="back-btn-options" class="menu">Back</button></div>
+            <button id="back-btn-options" class="menu-btn"><</button>
         </div>
         <div id="credits" class="menu" style="display: none;">  
             <h2>Credits</h2>
             <p>Developed by SMAN 1 Tasikmalaya</p>
-          	<div class="backborder"><button id="back-btn-credits" class="menu">Back</button></div>
+          	<button id="back-btn-credits" class="menu-btn"><</button>
         </div>
     </div>
     <script src="script.js"></script>
