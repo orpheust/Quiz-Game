@@ -12,12 +12,22 @@ const countdownElement = document.getElementById("countdown");
 const timerElement = document.getElementById("timer");
 const questionDuration = 15;
 let countdownInterval;
+let score = 0;
+
+window.onload = function() {
+    slider = document.querySelector(".slider input");
+    slider.oninput = function() {
+        progressBar = document.querySelector(".slider progress");
+        progressBar.value = slider.value;
+        sliderValue =  document.querySelector(".sliderValue");
+        sliderValue.innerHTML = slider.value;
+    }
+}
 
 playButton.addEventListener("click", () => {
     mainMenu.style.display = "none";
     quizContainer.style.display = "block";
     startQuiz();
-    startCountdown(questionDuration);
 });
 
 optionsButton.addEventListener("click", () => {
@@ -175,51 +185,25 @@ const questionElement = document.getElementById("question");
 const answerButtonsElement = document.getElementById("answer-buttons");
 
 let currentQuestionIndex = 0;
-let score = 0;
 
 function startQuiz() {
+    clearInterval(countdownInterval);
     currentQuestionIndex = 0;
     score = 0;
     nextButton.style.display = "none";
     showQuestion();
+    startCountdown(questionDuration);
     nextButton.innerHTML = "Next";
     nextButton.addEventListener("click", () => {
     if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
+        clearInterval(countdownInterval);
         showQuestion();
         startCountdown(questionDuration);
     } else {
         showScore();
     }
 });
-}
-
-function selectAnswer(event, answer) {
-    const selectedBtn = event.target;
-    const isCorrect = selectedBtn.dataset.correct === "false";
-    clearInterval(countdownInterval);
-    if (isCorrect) {
-        selectedBtn.classList.add("correct");
-        score++;
-    } else {
-        selectedBtn.classList.add("incorrect");
-
-        const correctAnswerBtn = Array.from(answerButtonsElement.children).find(
-            (button) => button.dataset.correct === "false"
-        );
-
-        if (correctAnswerBtn) {
-            correctAnswerBtn.classList.add("correct");
-        }
-    }
-    const answerButtons = document.querySelectorAll(".btn");
-    answerButtons.forEach((button) => {
-        button.disabled = true;
-    });
-
-    nextButton.disabled = false; 
-    nextButton.style.display = "block";
-    nextButton.innerHTML = "Next"; 
 }
 
 function showQuestion() {
@@ -239,9 +223,35 @@ function showQuestion() {
         }
     });
 
-    nextButton.style.display = "none"; 
+    nextButton.disabled = true;
 }
 
+function selectAnswer(event, answer) {
+  const selectedBtn = event.target;
+  const isCorrect = selectedBtn.dataset.correct === "true";
+  clearInterval(countdownInterval);
+  if (isCorrect) {
+    selectedBtn.classList.add("correct");
+    score++;
+  } else {
+    selectedBtn.classList.add("incorrect");
+
+    const correctAnswerBtn = Array.from(answerButtonsElement.children).find(
+      (button) => button.dataset.correct === "true"
+    );
+
+    if (correctAnswerBtn) {
+      correctAnswerBtn.classList.add("correct");
+    }
+  }
+  const answerButtons = document.querySelectorAll(".btn");
+  answerButtons.forEach((button) => {
+    button.disabled = true;
+  });
+
+  nextButton.disabled = false;
+  nextButton.style.display = "block";
+}
 
 function showScore() {
     resetState();
@@ -249,7 +259,10 @@ function showScore() {
     nextButton.innerHTML = "Play Again";
     nextButton.style.display = "block";
     nextButton.addEventListener("click", () => {
-        startQuiz()
+        startQuiz();
+        clearInterval(countdownInterval);
+        startCountdown(questionDuration);
+
     });
 }
 
