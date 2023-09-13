@@ -72,7 +72,21 @@ body {
 	cursor: no-drop;
 }
 
-#next-btn{
+#home-btn {
+	background-color: black;
+	color: #fff;
+	font-weight: 500;
+	width: 150px;
+	border: 0;
+	padding: 10px;
+	margin: 20px auto 0;
+	border-radius: 4px;
+	cursor: pointer;
+	display: none;
+	text-align: center;
+}
+
+#next-btn {
 	background-color: black;
 	color: #fff;
 	font-weight: 500;
