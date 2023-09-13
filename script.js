@@ -17,7 +17,6 @@ playButton.addEventListener("click", () => {
     mainMenu.style.display = "none";
     quizContainer.style.display = "block";
     startQuiz();
-    startCountdown(questionDuration);
 });
 
 optionsButton.addEventListener("click", () => {
@@ -182,6 +181,7 @@ function startQuiz() {
     score = 0;
     nextButton.style.display = "none";
     showQuestion();
+    startCountdown(questionDuration);
     nextButton.innerHTML = "Next";
     nextButton.addEventListener("click", () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -192,34 +192,6 @@ function startQuiz() {
         showScore();
     }
 });
-}
-
-function selectAnswer(event, answer) {
-    const selectedBtn = event.target;
-    const isCorrect = selectedBtn.dataset.correct === "false";
-    clearInterval(countdownInterval);
-    if (isCorrect) {
-        selectedBtn.classList.add("correct");
-        score++;
-    } else {
-        selectedBtn.classList.add("incorrect");
-
-        const correctAnswerBtn = Array.from(answerButtonsElement.children).find(
-            (button) => button.dataset.correct === "false"
-        );
-
-        if (correctAnswerBtn) {
-            correctAnswerBtn.classList.add("correct");
-        }
-    }
-    const answerButtons = document.querySelectorAll(".btn");
-    answerButtons.forEach((button) => {
-        button.disabled = true;
-    });
-
-    nextButton.disabled = false; 
-    nextButton.style.display = "block";
-    nextButton.innerHTML = "Next"; 
 }
 
 function showQuestion() {
@@ -239,9 +211,35 @@ function showQuestion() {
         }
     });
 
-    nextButton.style.display = "none"; 
+    nextButton.disabled = true;
 }
 
+function selectAnswer(event, answer) {
+  const selectedBtn = event.target;
+  const isCorrect = selectedBtn.dataset.correct === "true";
+  clearInterval(countdownInterval);
+  if (isCorrect) {
+    selectedBtn.classList.add("correct");
+    score++;
+  } else {
+    selectedBtn.classList.add("incorrect");
+
+    const correctAnswerBtn = Array.from(answerButtonsElement.children).find(
+      (button) => button.dataset.correct === "true"
+    );
+
+    if (correctAnswerBtn) {
+      correctAnswerBtn.classList.add("correct");
+    }
+  }
+  const answerButtons = document.querySelectorAll(".btn");
+  answerButtons.forEach((button) => {
+    button.disabled = true;
+  });
+
+  nextButton.disabled = false;
+  nextButton.style.display = "block";
+}
 
 function showScore() {
     resetState();
@@ -249,7 +247,8 @@ function showScore() {
     nextButton.innerHTML = "Play Again";
     nextButton.style.display = "block";
     nextButton.addEventListener("click", () => {
-        startQuiz()
+        startQuiz();
+        startCountdown(questionDuration);
     });
 }
 
