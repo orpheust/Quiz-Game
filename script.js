@@ -11,6 +11,8 @@ const creditsContainer = document.getElementById("credits");
 const countdownElement = document.getElementById("countdown");
 const timerElement = document.getElementById("timer");
 const questionDuration = 15;
+const homeButton = document.getElementById("home-btn");
+const title = document.getElementById("title");
 let countdownInterval;
 let score = 0;
 
@@ -33,7 +35,6 @@ playButton.addEventListener("click", () => {
 optionsButton.addEventListener("click", () => {
     mainMenu.style.display = "none";
     optionsContainer.style.display = "block";
-    // Add your options menu logic here
 });
 
 creditsButton.addEventListener("click", () => {
@@ -46,7 +47,19 @@ backButtonOptions.addEventListener("click", () => {
 });
 
 backButtonCredits.addEventListener("click", () => {
+    resetState();
     goToMainMenu();
+});
+
+homeButton.addEventListener("click", () => {
+    goToMainMenu();
+    homeButton.disabled = true;
+    playButton.disabled = false;
+    optionsButton.disabled = false;
+    creditsButton.disabled = false;
+    countdownElement.style.display = "none";
+    title.style.display = "block";
+
 });
 
 function goToMainMenu() {
@@ -187,10 +200,12 @@ const answerButtonsElement = document.getElementById("answer-buttons");
 let currentQuestionIndex = 0;
 
 function startQuiz() {
+    title.style.display = "none";
     clearInterval(countdownInterval);
     currentQuestionIndex = 0;
     score = 0;
     nextButton.style.display = "none";
+    homeButton.style.display = "none";
     showQuestion();
     startCountdown(questionDuration);
     nextButton.innerHTML = "Next";
@@ -255,14 +270,16 @@ function selectAnswer(event, answer) {
 
 function showScore() {
     resetState();
+    countdownElement.style.display = "none";
     questionElement.innerHTML = 'You scored ' + score + ' out of ' + questions.length + '!';
     nextButton.innerHTML = "Play Again";
+    homeButton.style.display = "block";
     nextButton.style.display = "block";
+    homeButton.disabled = false;
     nextButton.addEventListener("click", () => {
         startQuiz();
         clearInterval(countdownInterval);
         startCountdown(questionDuration);
-
     });
 }
 
